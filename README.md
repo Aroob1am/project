@@ -5,4 +5,4 @@ Student Name: Aroob almudaimigh ID:443200454, Student Name :Athbah alaliwei ID:4
 
 Introduction 
 
-Worldwide, brain stroke is the second leading cause of death and third leading cause of disability . As per the recent data, in India, every 3 people suffer from brain stroke every minute. we chose this data set so it can be used to improve and enhance medical knowledge,develop more effective prevention strategies about this disease,enhance treatment options,and reduce the prevalence and impact of brain stroke on society.
+Worldwide, brain stroke is the second leading cause of death and third leading cause of disability . As per the recent data, in India, every 3 people suffer from brain stroke every minute. we chose this data set so it can be used to improve and enhance medical knowledge,develop more effective prevention strategies about this disease,enhance treatment options,and reduce the prevalence and impact of brain stroke on society and spread awaeness.
