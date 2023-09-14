@@ -1,0 +1,79 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+\`\`\`{markdown}
+
+title: "Brain stroke"
+
+##Goal of collecting this Dataset
+
+Our goal of collecting a dataset about brain stroke is to gather
+relevant and accurate information about this medical condition by
+gathering information about the patients health history,age and
+gender.This data will help enhancing patient care so that researchers
+and healthcare professionals can gain knowledge of the risk factors
+,causes, age rating of patients and symptoms associated with brain
+stroke.
+
+Classification goal:
+
+We want to classify the patients to be able to accurately predict
+whether a patient will have a stroke or not based on age, medical
+history and gender. Using this classification we can help in early
+identification and prevention of strokes ,this would help us for a
+better patient care.
+
+##The source
+
+The dataset was sourced from kaggle website The link:
+[here](https://www.kaggle.com/datasets/jillanisofttech/brain-stroke-dataset).
+
+##General information
+
+Number of Attributes: 11, Number of Objects: 4982, Class label: brain
+stroke status 1 if the patient had a stroke 0 if not.
+
+1)  gender: "Male", "Female"
+
+2)  age: age of the patient
+
+3)  hypertension: 0 if the patient doesn't have hypertension, 1 if the
+    patient has hypertension
+
+4)  heart disease: 0 if the patient doesn't have any heart diseases, 1
+    if the patient has a heart disease
+
+5)  Ever-married: "No" or "Yes"
+
+6)  work type: "children", "Govt_job", "Never worked", "Private" or
+    "Self-employed"
+
+7)  Residence type: "Rural" or "Urban"
+
+8)  avg glucose level: average glucose level in blood
+
+9)  BMI: body mass index
+
+10) smoking_status: "formerly smoked", "never smoked", "smokes" or
+    "Unknown"
+
+11) stroke: 1 if the patient had a stroke or 0 if not
+
+    | attribute name    | data type | description                                      | possible values                                                      |
+    |-----------------|-----------------|---------------------|-----------------|
+    | gender            | string    | Gender of the patient (e.g., Male, Female).      | Male, Female                                                         |
+    | Age               | decimal   | Patient's age in years at the time of assessment | 0.08 to 82                                                           |
+    | hypertension      | integer   | if the patient has hypertension                  | 0 or 1                                                               |
+    | heart disease     | integer   | if the patient has heart disease                 | 0 or 1                                                               |
+    | Residence type    | string    | the residence type of the patient                | "Rural" or "Urban"                                                   |
+    | Ever-married      | string    | if the patient has ever married or not           | "No" or "Yes"                                                        |
+    | work type         | string    | the work type of the patient                     | "children", "Govt_job", "Never worked", "Private" or "Self-employed" |
+    | avg glucose level | decimal   | average glucose level in blood                   | 55.1 - 272                                                           |
+    | BMI               | decimal   | Body Mass Index (BMI) of the patient.            | 14 - 48.9                                                            |
+    | smoking status    | string    | the smoking status of the patient                | "formerly smoked", "never smoked", "smokes" or "Unknown"             |
+    | stroke            | integer   | if the patient had a stroke or not               | 0 or 1                                                               |
