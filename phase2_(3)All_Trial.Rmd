@@ -83,74 +83,55 @@ stroke status 1 if the patient had a stroke 0 if not.
 
 11) stroke: 1 if the patient had a stroke or 0 if not
 
-    +-------------+-------------+-------------+-------------+
-    | attribute   | data type   | description | possible    |
-    | name        |             |             | values      |
-    +=============+=============+=============+=============+
-    | gender      | string      | Gender of   | Male,       |
-    |             |             | the patient | Female      |
-    |             |             | (e.g.,      |             |
-    |             |             | Male,       |             |
-    |             |             | Female).    |             |
-    +-------------+-------------+-------------+-------------+
-    | Age         | decimal     | Patient's   | 0.08 to 82  |
-    |             |             | age in      |             |
-    |             |             | years at    |             |
-    |             |             | the time of |             |
-    |             |             | assessment  |             |
-    +-------------+-------------+-------------+-------------+
-    | h           | integer     | if the      | 0 or 1      |
-    | ypertension |             | patient has |             |
-    |             |             | h           |             |
-    |             |             | ypertension |             |
-    +-------------+-------------+-------------+-------------+
-    | heart       | integer     | if the      | 0 or 1      |
-    | disease     |             | patient has |             |
-    |             |             | heart       |             |
-    |             |             | disease     |             |
-    +-------------+-------------+-------------+-------------+
-    | Residence   | string      | the         | "Rural" or  |
-    | type        |             | residence   | "Urban"     |
-    |             |             | type of the |             |
-    |             |             | patient     |             |
-    +-------------+-------------+-------------+-------------+
-    | E           | string      | if the      | "No" or     |
-    | ver-married |             | patient has | "Yes"       |
-    |             |             | ever        |             |
-    |             |             | married or  |             |
-    |             |             | not         |             |
-    +-------------+-------------+-------------+-------------+
-    | work type   | string      | the work    | "children", |
-    |             |             | type of the | "Govt_job", |
-    |             |             | patient     | "Never      |
-    |             |             |             | worked",    |
-    |             |             |             | "Private"   |
-    |             |             |             | or " S e    |
-    |             |             |             | l           |
-    |             |             |             | f-employed" |
-    +-------------+-------------+-------------+-------------+
-    | avg glucose | decimal     | average     | 55.1 - 272  |
-    | level       |             | glucose     |             |
-    |             |             | level in    |             |
-    |             |             | blood       |             |
-    +-------------+-------------+-------------+-------------+
-    | BMI         | decimal     | Body Mass   | 14 - 48.9   |
-    |             |             | Index (BMI) |             |
-    |             |             | of the      |             |
-    |             |             | patient.    |             |
-    +-------------+-------------+-------------+-------------+
-    | smoking     | string      | the smoking | "formerly   |
-    | status      |             | status of   | smoked",    |
-    |             |             | the patient | "never      |
-    |             |             |             | smoked",    |
-    |             |             |             | "smokes" or |
-    |             |             |             | "Unknown"   |
-    +-------------+-------------+-------------+-------------+
-    | stroke      | integer     | if the      | 0 or 1      |
-    |             |             | patient had |             |
-    |             |             | a stroke or |             |
-    |             |             | not         |             |
-    +-------------+-------------+-------------+-------------+
+    +-----------+-----------+----------------+---------------------------+
+    | attribute | data type | description    | possible values           |
+    | name      |           |                |                           |
+    +===========+===========+================+===========================+
+    | gender    | string    | Gender of the  | Male, Female              |
+    |           |           | patient (e.g., |                           |
+    |           |           | Male, Female). |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | Age       | decimal   | Patient's age  | 0.08 to 82                |
+    |           |           | in years at    |                           |
+    |           |           | the time of    |                           |
+    |           |           | assessment     |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | h yp      | integer   | if the patient | 0 or 1                    |
+    | ertension |           | has h          |                           |
+    |           |           | ypertension    |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | heart     | integer   | if the patient | 0 or 1                    |
+    | disease   |           | has heart      |                           |
+    |           |           | disease        |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | Residence | string    | the residence  | "Rural" or "Urban"        |
+    | type      |           | type of the    |                           |
+    |           |           | patient        |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | E ve      | string    | if the patient | "No" or "Yes"             |
+    | r-married |           | has ever       |                           |
+    |           |           | married or not |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | work type | string    | the work type  | "children", "Govt_job",   |
+    |           |           | of the patient | "Never worked", "Private" |
+    |           |           |                | or " S e l f-employed"    |
+    +-----------+-----------+----------------+---------------------------+
+    | avg       | decimal   | average        | 55.1 - 272                |
+    | glucose   |           | glucose level  |                           |
+    | level     |           | in blood       |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | BMI       | decimal   | Body Mass      | 14 - 48.9                 |
+    |           |           | Index (BMI) of |                           |
+    |           |           | the patient.   |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | smoking   | string    | the smoking    | "formerly smoked", "never |
+    | status    |           | status of the  | smoked", "smokes" or      |
+    |           |           | patient        | "Unknown"                 |
+    +-----------+-----------+----------------+---------------------------+
+    | stroke    | integer   | if the patient | 0 or 1                    |
+    |           |           | had a stroke   |                           |
+    |           |           | or not         |                           |
+    +-----------+-----------+----------------+---------------------------+
 
 # Summarization
 
@@ -1183,7 +1164,7 @@ the data
 ##### This code performs k-means clustering multiple times with different initializations and estimates the optimal number of clusters. It then visualizes the clustering results using a cluster plot. This process can help determine the appropriate number of clusters and gain insights into the structure of the data.
 
 ```{r}
-#install.packages("fpc")
+install.packages("fpc")
 library(fpc)
 #kmeansruns() : It calls  kmeans() to perform  k-means clustering
 #It initializes the k-means algorithm several times with random points from the data set as means.
@@ -1252,44 +1233,39 @@ random forests may better capture the patterns in your labeled data.
 
 #### Overall best cluster size
 
-+-------------+-------------+-------------+-------------+
-| Cluster     | k=2(Best)   | k=3         | k=4         |
-| size        |             |             |             |
-+=============+=============+=============+=============+
-| Average     | cluster1 =  | cluster1 =  | cluster1 =  |
-| Silhouette  | 0.39        | 0.60        | 0.20        |
-| width for   |             |             |             |
-| each        | cluster2 =  | cluster2 =  | cluster2 =  |
-| cluster     | 0.30        | 0.17        | 0.19        |
-|             |             |             |             |
-|             |             | cluster3 =  | cluster3 =  |
-|             |             | 0.20        | 0.15        |
-|             |             |             |             |
-|             |             |             | cluster4 =  |
-|             |             |             | 0.58        |
-+-------------+-------------+-------------+-------------+
-| Average     | 0.33        | 0.25        | 0.24        |
-| Silhouette  |             |             |             |
-| width for   |             |             |             |
-| all         |             |             |             |
-| clusters    |             |             |             |
-+-------------+-------------+-------------+-------------+
-| Total w i   | 18358.56    | 14981.07    | 12844.35    |
-| t           |             |             |             |
-| hin-cluster |             |             |             |
-| sum of      |             |             |             |
-| square      |             |             |             |
-+-------------+-------------+-------------+-------------+
-| BCubed      | 0.9071407   | 0.909903    | 0.9085269   |
-| precision   |             |             |             |
-+-------------+-------------+-------------+-------------+
-| BCubed      | 0.6096986   | 0.410234    | 0.2755282   |
-| recall      |             |             |             |
-+-------------+-------------+-------------+-------------+
-| V           | all of the  | all of the  | all of the  |
-| i           | figures is  | figures is  | figures is  |
-| sualization | shown above | shown above | shown above |
-+-------------+-------------+-------------+-------------+
++---------------+---------------+---------------+---------------+
+| Cluster size  | k=2(Best)     | k=3           | k=4           |
++===============+===============+===============+===============+
+| Average       | cluster1 =    | cluster1 =    | cluster1 =    |
+| Silhouette    | 0.39          | 0.60          | 0.20          |
+| width for     |               |               |               |
+| each cluster  | cluster2 =    | cluster2 =    | cluster2 =    |
+|               | 0.30          | 0.17          | 0.19          |
+|               |               |               |               |
+|               |               | cluster3 =    | cluster3 =    |
+|               |               | 0.20          | 0.15          |
+|               |               |               |               |
+|               |               |               | cluster4 =    |
+|               |               |               | 0.58          |
++---------------+---------------+---------------+---------------+
+| Average       | 0.33          | 0.25          | 0.24          |
+| Silhouette    |               |               |               |
+| width for all |               |               |               |
+| clusters      |               |               |               |
++---------------+---------------+---------------+---------------+
+| Total w i t   | 18358.56      | 14981.07      | 12844.35      |
+| hin-cluster   |               |               |               |
+| sum of square |               |               |               |
++---------------+---------------+---------------+---------------+
+| BCubed        | 0.9071407     | 0.909903      | 0.9085269     |
+| precision     |               |               |               |
++---------------+---------------+---------------+---------------+
+| BCubed recall | 0.6096986     | 0.410234      | 0.2755282     |
++---------------+---------------+---------------+---------------+
+| V i           | all of the    | all of the    | all of the    |
+| sualization   | figures is    | figures is    | figures is    |
+|               | shown above   | shown above   | shown above   |
++---------------+---------------+---------------+---------------+
 
 ------------------------------------------------------------------------
 
@@ -1325,32 +1301,43 @@ if (!requireNamespace("caret", quietly = TRUE)) {
 library(caret)
 
 # Check data dimensions
-print(dim(brain_stroke))
+print(dim(datasetbrainstroke))
 
 # Check if 'stroke' is present
-if (!"stroke" %in% colnames(brain_stroke)) {
+if (!"stroke" %in% colnames(datasetbrainstroke)) {
   stop("Column 'stroke' not found in the data.")
 }
 
 # Convert 'stroke' to a factor (if not already)
-brain_stroke$stroke <- as.factor(brain_stroke$stroke)
+datasetbrainstroke$stroke <- as.factor(datasetbrainstroke$stroke)
 
 # Upscale the data
-brain_stroke <- upSample(brain_stroke[, -11], brain_stroke$stroke, yname = "stroke")
+datasetbrainstroke <- upSample(datasetbrainstroke[, -11], datasetbrainstroke$stroke, yname = "stroke")
 
 # Checking the number of stroke/non-stroke observations
-prop.table(table(brain_stroke$stroke))
-table(brain_stroke$stroke)
+prop.table(table(datasetbrainstroke$stroke))
+table(datasetbrainstroke$stroke)
 
 # Create a barplot to visualize the distribution after oversampling
-barplot(table(brain_stroke$stroke), main = "Data after oversampling", xlab = "Stroke", ylab = "observations")
+barplot(table(datasetbrainstroke$stroke), main = "Data after oversampling", xlab = "Stroke", ylab = "observations")
 ```
+
+We picked the holdout method for classification because it's good for
+checking how well the model works on new data in my dataset . It's
+simple and quick, making it easier to compare different models and
+adjust settings. This method works well for medium to large datasets and
+situations where we need a straightforward evaluation.
+
+In this part ,we will apply various techniques for attribute selection,
+including the Gini index, Gain ratio, and information gain, to build a
+decision tree model
+
+# 1.Split the datasets into two subsets: Training(70%) and Testing(30%):
 
 ```{r}
 install.packages("party")
 
 
-# 1.Split the datasets into two subsets: Training(70%) and Testing(30%):
 
 set.seed(1234)
 ind <- sample(2, nrow(brain_stroke), replace = TRUE, prob = c(0.7, 0.3))
@@ -1364,17 +1351,17 @@ head(test.data)
 ```
 
 ```{r}
-brain_stroke$gender <- as.factor(brain_stroke$gender)
-brain_stroke$age<- as.factor(brain_stroke$age)
-brain_stroke$hypertension <- as.factor(brain_stroke$hypertension)
-brain_stroke$heart_disease <- as.factor(brain_stroke$heart_disease)
-brain_stroke$ever_married <- as.factor(brain_stroke$ever_married)
-brain_stroke$work_type <- as.factor(brain_stroke$work_type)
-brain_stroke$Residence_type <- as.factor(brain_stroke$Residence_type)
-brain_stroke$avg_glucose_level <- as.factor(brain_stroke$avg_glucose_level)
-brain_stroke$smoking_status <- as.factor(brain_stroke$smoking_status)
-brain_stroke$stroke <- as.factor(brain_stroke$stroke)
-brain_stroke$bmi <- as.factor(brain_stroke$bmi)
+datasetbrainstroke$gender <- as.factor(datasetbrainstroke$gender)
+datasetbrainstroke$age<- as.factor(datasetbrainstroke$age)
+datasetbrainstroke$hypertension <- as.factor(datasetbrainstroke$hypertension)
+datasetbrainstroke$heart_disease <- as.factor(datasetbrainstroke$heart_disease)
+datasetbrainstroke$ever_married <- as.factor(datasetbrainstroke$ever_married)
+datasetbrainstroke$work_type <- as.factor(datasetbrainstroke$work_type)
+datasetbrainstroke$Residence_type <- as.factor(datasetbrainstroke$Residence_type)
+datasetbrainstroke$avg_glucose_level <- as.factor(datasetbrainstroke$avg_glucose_level)
+datasetbrainstroke$smoking_status <- as.factor(datasetbrainstroke$smoking_status)
+datasetbrainstroke$stroke <- as.factor(datasetbrainstroke$stroke)
+datasetbrainstroke$bmi <- as.factor(datasetbrainstroke$bmi)
 
 
 train.data$Residence_type <- as.factor(train.data$Residence_type)
@@ -1462,7 +1449,7 @@ plot(brain_stroke.ctree)
 table(predict(brain_stroke.ctree), train.data$stroke)
 ```
 
-# 4.Print and plot the tree:
+# Print and plot the tree:
 
 ```{r}
 
@@ -1758,7 +1745,7 @@ table(predict(brain_stroke.ctree), train.data$stroke)
 
 ```
 
-# 4.Print and plot the tree:
+Print and plot the tree:
 
 ```{r}
 
@@ -1884,3 +1871,8 @@ results<- confusionMatrix(testPred,test.data$stroke,positive="1")
 print(results)
 
 ```
+
+After using the model to classify the data, things look good. The model
+did well in sorting out the different groups.This means the model is
+doing what we wanted it to do. It's like a solid base for making smart
+choices, and it gives us useful info for future projects using data.
