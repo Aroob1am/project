@@ -1,0 +1,1878 @@
+---
+title: "Brain stroke"
+output: html_notebook
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Goal of collecting this Dataset
+
+Our goal of collecting a dataset about brain stroke is to gather
+relevant and accurate information about this medical condition by
+gathering information about the patients health history,age and
+gender.This data will help enhancing patient care so that researchers
+and healthcare professionals can gain knowledge of the risk factors
+,causes, age rating of patients and symptoms associated with brain
+stroke.
+
+# Classification goal:
+
+We want to classify the patients to be able to accurately predict
+whether a patient will have a stroke or not based on age, medical
+history and gender. Using this classification we can help in early
+identification and prevention of strokes ,this would help us for a
+better patient care.
+
+# Clustering goal:
+
+The goal of clustering is to identify patterns or groupings within the
+data that can help in better understanding the risk factors of brain
+stroke. It can help to categorize similar cases or patients, which might
+be useful for research, diagnosis and treatment planning.
+
+The Problem statement: To use data mining techniques to help researchers
+for early detection, risk assessment, and improved understanding of
+brain strokes, explore the given dataset on brain stroke and develop a
+predictive model that can identify the key risk factors associated with
+stroke. Specifically, the project aims to:
+
+1.  Perform exploratory data analysis to gain insights into the
+    distribution and characteristics of the variables in the dataset.
+2.  Identify the most significant variables and their relationships with
+    stroke occurrence using statistical analysis and data visualization
+    techniques.
+3.  Preprocess the dataset by handling missing values, outliers, and
+    categorical variables, ensuring data quality and consistency.
+4.  Select appropriate data mining techniques, such as classification
+    algorithms, to build a predictive model for stroke risk assessment.
+
+# The source
+
+The dataset was sourced from kaggle website The link:
+[here](https://www.kaggle.com/datasets/jillanisofttech/brain-stroke-dataset).
+
+# General information
+
+Number of Attributes: 11, Number of Objects: 4982, Class label: brain
+stroke status 1 if the patient had a stroke 0 if not.
+
+1)  gender: "Male", "Female"
+
+2)  age: age of the patient
+
+3)  hypertension: 0 if the patient doesn't have hypertension, 1 if the
+    patient has hypertension
+
+4)  heart disease: 0 if the patient doesn't have any heart diseases, 1
+    if the patient has a heart disease
+
+5)  Ever-married: "No" or "Yes"
+
+6)  work type: "children", "Govt_job", "Never worked", "Private" or
+    "Self-employed"
+
+7)  Residence type: "Rural" or "Urban"
+
+8)  avg glucose level: average glucose level in blood
+
+9)  BMI: body mass index
+
+10) smoking_status: "formerly smoked", "never smoked", "smokes" or
+    "Unknown"
+
+11) stroke: 1 if the patient had a stroke or 0 if not
+
+    +-----------+-----------+----------------+---------------------------+
+    | attribute | data type | description    | possible values           |
+    | name      |           |                |                           |
+    +===========+===========+================+===========================+
+    | gender    | string    | Gender of the  | Male, Female              |
+    |           |           | patient (e.g., |                           |
+    |           |           | Male, Female). |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | Age       | decimal   | Patient's age  | 0.08 to 82                |
+    |           |           | in years at    |                           |
+    |           |           | the time of    |                           |
+    |           |           | assessment     |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | h yp      | integer   | if the patient | 0 or 1                    |
+    | ertension |           | has h          |                           |
+    |           |           | ypertension    |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | heart     | integer   | if the patient | 0 or 1                    |
+    | disease   |           | has heart      |                           |
+    |           |           | disease        |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | Residence | string    | the residence  | "Rural" or "Urban"        |
+    | type      |           | type of the    |                           |
+    |           |           | patient        |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | E ve      | string    | if the patient | "No" or "Yes"             |
+    | r-married |           | has ever       |                           |
+    |           |           | married or not |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | work type | string    | the work type  | "children", "Govt_job",   |
+    |           |           | of the patient | "Never worked", "Private" |
+    |           |           |                | or " S e l f-employed"    |
+    +-----------+-----------+----------------+---------------------------+
+    | avg       | decimal   | average        | 55.1 - 272                |
+    | glucose   |           | glucose level  |                           |
+    | level     |           | in blood       |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | BMI       | decimal   | Body Mass      | 14 - 48.9                 |
+    |           |           | Index (BMI) of |                           |
+    |           |           | the patient.   |                           |
+    +-----------+-----------+----------------+---------------------------+
+    | smoking   | string    | the smoking    | "formerly smoked", "never |
+    | status    |           | status of the  | smoked", "smokes" or      |
+    |           |           | patient        | "Unknown"                 |
+    +-----------+-----------+----------------+---------------------------+
+    | stroke    | integer   | if the patient | 0 or 1                    |
+    |           |           | had a stroke   |                           |
+    |           |           | or not         |                           |
+    +-----------+-----------+----------------+---------------------------+
+
+# Summarization
+
+**Load dataset**
+
+```{r}
+
+
+library(readr)
+brain_stroke <- read_csv("brain_stroke.csv")
+View(brain_stroke)
+
+```
+
+**Load necessary libraries**
+
+```{r}
+
+library(dplyr)
+library(ggplot2)
+library(outliers)
+
+```
+
+**Number of rows**
+
+```{r}
+
+nrow(brain_stroke)
+
+```
+
+**Number of columns**
+
+```{r}
+
+ ncol(brain_stroke)
+
+```
+
+**Sample of raw dataset**
+
+```{r}
+head(brain_stroke,n=10)
+
+```
+
+**Missing values**
+
+```{r}
+
+is.na(brain_stroke)
+sum(is.na(brain_stroke))
+
+```
+
+The output is 'false,' which suggests that there are no missing
+elements in our dataset
+
+**Statistical summaries**
+
+```{r}
+
+summary(brain_stroke$age)
+```
+
+The age ranges from a minimum of 0.08 to a maximum of 82.00, with most
+values concentrated between the first quartile (25.00) and the third
+quartile (61.00) and The median age is 45.00, and the mean age is
+approximately 43.42 , it is relatively wide age range with a skewed
+distribution towards older ages
+
+```{r}
+summary(brain_stroke$avg_glucose_level)
+```
+
+The average glucose levels shows that they range from a minimum of 55.12
+to a maximum of 271.74, with a median value of 91.85 and a mean of
+105.94, Most values are concentrated between the first quartile (77.23)
+and the third quartile (113.86), This suggests some variability in
+glucose levels, with a slightly right-skewed distribution.
+
+```{r}
+summary(brain_stroke$bmi)
+```
+
+the BMI data has a minimum value of 14.0 and a maximum of 48.9, with the
+median BMI being 28.1 and the mean approximately 28.5, The majority of
+values fall between the first quartile (23.7) and the third quartile
+(32.6), This indicates a range of BMI values with a distribution that
+appears to be somewhat right-skewed.
+
+```{r}
+var(brain_stroke$age)
+```
+
+The variance of age in your dataset is 513.6005, This measures the
+spread or variability in age values, A higher variance suggests a wider
+dispersion of ages in the dataset, indicating greater variability.
+
+```{r}
+var(brain_stroke$avg_glucose_level)
+```
+
+The variance of average glucose levels is 2031.789, This high variance
+suggests a considerable amount of variation in glucose levels among the
+individuals in the dataset.
+
+```{r}
+var(brain_stroke$bmi)
+```
+
+The variance of BMI is 46.1104,it indicates a moderate amount of
+variability in BMI values within the dataset.
+
+------------------------------------------------------------------------
+
+## **Boxplots**
+
+**boxplot of age**
+
+boxplot to visualize the distribution of ages in our dataset, it
+includes the median, quartiles, and potential outliers of
+the age variable.
+
+```{r}
+ boxplot.stats(brain_stroke$age)$out
+ boxplot(brain_stroke$age)
+
+```
+
+**boxplot of avg_glucose_level**
+
+boxplot to visualize the distribution of avg_glucose_level in our
+dataset, it includes the median, quartiles, and potential outliers of
+the avg_glucose_level variable.
+
+```{r}
+boxplot.stats(brain_stroke$avg_glucose_level)$out
+boxplot(brain_stroke$avg_glucose_level)
+
+```
+
+**boxplot of bmi**
+
+a boxplot to visualize the distribution of bmi in our dataset, it
+includes the median, quartiles, and potential outliers of
+the bmi variable.
+
+```{r}
+boxplot.stats(brain_stroke$bmi)$out
+boxplot(brain_stroke$bmi)
+```
+
+------------------------------------------------------------------------
+
+## **histogram**
+
+**Shows Distribution of ages**
+
+```{r}
+hist(brain_stroke$age, col = "purple", main = "Age Distribution", xlab
+= "Age")
+
+```
+
+We notice from this histogram that the majority of people in this
+dataset are between the ages of 40 to 60
+
+------------------------------------------------------------------------
+
+## **Scatter plot**
+
+**Shows the relationship between two attributes: "average glucose level"
+(on the x-axis) and "BMI" (Body Mass Index, on the y-axis)**
+
+```{r}
+ggplot(brain_stroke, aes(x = avg_glucose_level, y = bmi)) +
+geom_point() + labs(title = "Scatter Plot: BMI & average glucose level")
+
+cor(brain_stroke$avg_glucose_level, brain_stroke$bmi)
+
+
+```
+
+[1] 0.1863482 Based on the scatter plot and the correlation number We
+noticed that the correlation between the two attributes is very weak
+because the correlation is between 0 and 0.199.
+
+------------------------------------------------------------------------
+
+## Pie charts
+
+**Shows Distribution of Residence Types**
+
+```{r}
+tab <- table(brain_stroke$Residence_type)
+
+percentages <- prop.table(tab) * 100
+
+txt <- paste0(names(tab), '\n', round(percentages, 3), '%')
+
+pie(tab, labels = txt)
+
+```
+
+We notice from this pie chart that the majority of people in this
+dataset live in urban residence
+
+------------------------------------------------------------------------
+
+## **Bar Plots**
+
+### 1 - Shows the disturbution of work type
+
+```{r}
+
+
+library(ggplot2)
+
+# Assuming you have a data frame named 'brain_stroke'
+
+# Define a custom color palette
+my_colors <- c("pink", "lightblue", "lightgreen", "purple")  # You can add more colors as needed
+
+ggplot(brain_stroke, aes(x = work_type, fill = work_type)) +
+  geom_bar(color = "black", fill = my_colors) +
+  labs(title = "Bar Plot: Distribution of Work Type")
+
+
+
+
+
+```
+
+We notice from this bar plot that the majority of people in this dataset
+work for a private organization.
+
+After encoding, 'Children' will be number 1, 'Govt_job' will be number
+2, 'Private' will be number 3, and 'Self-employed' is number 4.
+
+### 2 - The resulting plot visually shows the distribution of heart disease cases and their association with brain stroke.
+
+```{r}
+
+
+library(ggplot2)
+library(dplyr)
+
+percentages <- brain_stroke %>%
+  group_by(heart_disease, stroke) %>%
+  summarize(count = n(), .groups = "drop") %>%
+  mutate(percentage = (count / sum(count)) * 100)
+
+ggplot(brain_stroke, aes(x = factor(heart_disease), fill = stroke)) +
+  geom_bar() +
+  geom_text(data = percentages, aes(label = paste0(round(percentage, 1), "%"), y = count), 
+            position = position_stack(vjust = 0.5)) +
+  labs(x = "Heart Disease", y = "Count", fill = "Stroke") +
+  scale_x_discrete(labels = c("No Heart Disease", "Heart Disease")) +
+  ggtitle("Barplot of Heart Disease and Stroke") +
+  theme_minimal()
+ 
+
+
+```
+
+The perecentage at the top of the column shows the percentage of having
+a brain stroke #We notice from this bar plot that people with heart
+disease have a higher risk of experiencing a brain stroke
+
+### 3 - The resulting plot visually shows the distribution of hypertension cases and their association with brain stroke.
+
+```{r}
+
+
+
+percentages <- brain_stroke %>%
+  group_by(hypertension, stroke) %>%
+  summarize(count = n()) %>%
+  mutate(percentage = (count / sum(count)) * 100)
+
+ggplot(brain_stroke, aes(x = factor(hypertension), fill = stroke)) +
+  geom_bar() +
+  geom_text(data = percentages, aes(label = paste0(round(percentage, 1), "%"), y = count), 
+            position = position_stack(vjust = 0.5)) +
+  labs(x = "Hypertension", y = "Count", fill = "Stroke") +
+  ggtitle("Barplot of Hypertension and Stroke") +
+  scale_x_discrete(labels = c("No Hypertension", "Hypertension")) +  # Custom labels
+  theme_minimal()
+
+
+```
+
+The perecentage at the top of the column shows the percentage of having
+a brain stroke ,We notice from this bar plot that people with
+hypertension have a higher risk of experiencing a brain stroke.
+
+### 4 - bar blot that shows the distrbutaion of smoking status.
+
+```{r}
+
+library(ggplot2)
+
+ggplot(brain_stroke) +
+  geom_bar(aes(x = smoking_status, fill = smoking_status)) +
+  labs(
+    title = " Distrbutaion of smoking status",
+    x = "Smoking Status",
+    y = "Count",
+    fill = "Smoking Status"
+  ) +
+  scale_fill_manual(values = c("formerly smoked" = "lightblue", "never smoked" = "lightgreen", "smokes" = "pink", "Unknown" = "gray")) +
+  theme_minimal()
+
+
+
+```
+
+We notice from this code that the majority of people in this dataset
+have never Smoked.
+
+### 4 - bar blot that helps visualize if there is any association between smoking status and the likelihood of experiencing a stroke.(بينشال او الكومنت يتعدل)
+
+```{r}
+library(ggplot2)
+
+ggplot(brain_stroke) +
+  geom_bar(mapping = aes(x = smoking_status, fill = factor(stroke)), position = "dodge") +
+  labs(
+    title = "Association Between Stroke and Smoking Status",
+    x = "Smoking Status",
+    y = "Count",
+    fill = "Stroke"
+  ) +
+  scale_fill_manual(values = c("0" = "blue", "1" = "red")) +
+  theme_minimal()
+```
+
+We notice from this bar plot that people who formerly smoked and smokes
+have a higher risk of experiencing a brain stroke, we notice that by
+comparing between the length of the blue columns which represnt each
+smoking staus not having a stroke posability against the length of the
+red column wich represent having stroke\*
+
+### 5- Class plot that shows if the dataset is balanced or imbalanced
+
+```{r}
+library(ggplot2)
+
+ggplot(brain_stroke, aes(x = factor(stroke), fill = factor(stroke))) +
+  geom_bar() +
+  labs(
+    title = "Class Distribution of Stroke",
+    x = "Stroke",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("0" = "red", "1" = "blue"))
+
+```
+
+This plot shows that our dataset is imbalanced, The "0" column (no
+stroke) is significantly higher than the "1" column (stroke), it
+indicates an imbalance in the dataset with respect to the stroke class.
+
+------------------------------------------------------------------------
+
+# Pre-Processing
+
+## Outliers
+
+```{r}
+
+library(outliers)
+
+Outavg_glucose_level = outlier(brain_stroke$avg_glucose_level, logical =TRUE) 
+sum(Outavg_glucose_level) 
+Find_outlier = which(Outavg_glucose_level ==TRUE, arr.ind = TRUE) 
+Outavg_glucose_level 
+Find_outlier
+
+Outbmi = outlier(brain_stroke$bmi, logical =TRUE) 
+sum(Outbmi) 
+Find_outlier = which(Outbmi ==TRUE, arr.ind = TRUE) 
+Outbmi 
+Find_outlier
+
+Outage = outlier(brain_stroke$age, logical =TRUE) 
+sum(Outage) 
+Find_outlier = which(Outage ==TRUE, arr.ind = TRUE) 
+Outage 
+Find_outlier
+
+
+```
+
+By removing outliers, we improve the overall quality and accuracy of the
+dataset. We detected and identified outliers in the "avg_glucose_level,"
+"bmi," and "age" columns of the "brain_stroke" dataset ,This helps
+ensure that the data reflects the true relationships.
+
+## Normalization
+
+```{r}
+
+normalize <- function(x) {return ((x - min(x)) / (max(x) - min(x)))}
+dataWithoutNormalization <- brain_stroke
+brain_stroke$bmi<-normalize(dataWithoutNormalization$bmi) 
+brain_stroke$age<-normalize(dataWithoutNormalization$age) 
+brain_stroke$avg_glucose_level<-normalize(dataWithoutNormalization$age) 
+print(brain_stroke)
+
+```
+
+## Discretization
+
+```{r}
+ 
+#we do not need feature discretization because the data is already well-preprocessed.
+```
+
+## Feature selection
+
+### correlation
+
+```{r}
+#feature selection - correlation analysis (numric)
+cor(brain_stroke$age, brain_stroke$stroke)
+cor(brain_stroke$bmi, brain_stroke$stroke)
+cor(brain_stroke$hypertension, brain_stroke$stroke)
+cor(brain_stroke$heart_disease, brain_stroke$stroke)
+cor(brain_stroke$avg_glucose_level, brain_stroke$stroke)
+```
+
+There's a weak correlations between numerical attributes (typically
+below 0.3) . This implies that feature selection isn't necessary.
+
+### Chi square
+
+```{r}
+#feature selection - chi square (cateorigal)
+
+chi_squared_result <-
+chisq.test(table(brain_stroke$gender, brain_stroke$stroke))
+print(chi_squared_result)
+
+chi_squared_result <-
+chisq.test(table(brain_stroke$work_type, brain_stroke$stroke))
+print(chi_squared_result)
+
+chi_squared_result <-
+chisq.test(table(brain_stroke$Residence_type, brain_stroke$stroke))
+print(chi_squared_result)
+
+chi_squared_result <-
+chisq.test(table(brain_stroke$smoking_status, brain_stroke$stroke))
+print(chi_squared_result)
+
+chi_squared_result <-
+chisq.test(table(brain_stroke$ever_married, brain_stroke$stroke))
+print(chi_squared_result)
+```
+
+After each test, the result is used to display the chi-squared test
+result, including the chi-squared statistic, degrees of freedom, by
+comparing chi-square value with the DF in the probability level table,
+it showed that the attributs "work_type", "smoking_status",
+"ever_married" have a greater chi square value than DF value.
+
+### Delete
+
+```{r}
+
+
+# Remove specific columns from the data frame
+# Delete work_type, ever_married, and smoking_status columns
+data <- data[, !names(data) %in% c("work_type", "smoking_status", "ever_married")]
+head(data)
+
+ 
+
+
+
+
+```
+
+### Encoding and scaling
+
+#### Data types should be transformed into numeric types before clustering.
+
+### Encoding
+
+```{r}
+#Encoding
+
+brain_stroke$work_type = factor(brain_stroke$work_type,levels = c("Govt_job","Private", "Self-employed"
+,"children","Never_worked"), labels = c(5,4,3,2,1))
+
+brain_stroke$gender = factor(brain_stroke$gender, levels = c("Male", "Female"), labels = c(1, 2))
+
+brain_stroke$ever_married= factor(brain_stroke$ever_married, levels = c("No", "Yes"), labels = c(0, 1))
+
+brain_stroke$Residence_type = factor(brain_stroke$Residence_type, levels = c("Urban", "Rural"), labels = c(1, 2))
+
+
+brain_stroke$smoking_status = factor(brain_stroke$smoking_status, levels = c("Unknown", "never smoked", "formerly smoked", "smokes"), labels = c(1, 2, 3, 4))
+
+
+#encoding الي ضبط الاكواد
+
+brain_stroke$gender <- as.numeric(brain_stroke$gender)
+brain_stroke$ever_married <- as.numeric(brain_stroke$ever_married)
+brain_stroke$work_type <- as.numeric(brain_stroke$work_type)
+brain_stroke$Residence_type <- as.numeric(brain_stroke$Residence_type)
+brain_stroke$smoking_status <- as.numeric(brain_stroke$smoking_status)
+```
+
+```{r}
+View(brain_stroke)
+data("brain_stroke")
+summary(brain_stroke)
+str(brain_stroke)
+```
+
+### Scale
+
+```{r}
+
+# Define the columns you want to scale
+columns_to_scale <- c("age", "avg_glucose_level", "bmi")
+
+
+brain_stroke[columns_to_scale] <- scale(brain_stroke[columns_to_scale])
+View(brain_stroke)
+```
+
+```{r}
+### load the data after preprocessing to a CVS file
+
+write.csv(brain_stroke, file = "dataset_brain_stroke.csv" ,row.names = FALSE)
+### load the processed data
+
+datasetbrainstroke <- read.csv("dataset_brain_stroke.csv" ,header = TRUE,sep=',', stringsAsFactors = T)
+```
+
+------------------------------------------------------------------------
+
+# Clustering
+
+Clustering is an unsupervised machine learning technique used to
+discover inherent patterns and structures within datasets. Unlike
+supervised methods, clustering works on unlabeled data, grouping similar
+instances together based on feature similarities. This exploration
+technique is valuable for various applications, including data
+segmentation and anomaly detection.
+
+In this analysis, we will apply clustering algorithms to a dataset
+related to brain stroke prediction. By identifying natural groupings
+within the data, we aim to uncover insights into potential risk factors
+associated with stroke occurrences.
+
+### Removing class label before clustering
+
+#### Because Clustering is a form of unsupervised learning, which means the algorithm doesn't use any prior knowledge of class labels or target values. Instead, it discovers patterns or structures within the data based on the features provided.
+
+```{r}
+
+
+brain_stroke <- subset(brain_stroke, select = -stroke)
+
+head(brain_stroke)
+
+
+```
+
+### K-means clustering, K= 2 Clusters
+
+```{r}
+# run k-means clustering to find 2 clusters
+#set a seed for random number generation  to make the results reproducible
+set.seed(8953)
+kmeans.result <- kmeans(brain_stroke, 2)
+# print the clusterng result
+kmeans.result
+
+```
+
+Results of a k-means clustering analysis on brain stroke , revealing two
+distinct clusters (Cluster 1 and Cluster 2). The cluster means highlight
+the average characteristics of each group, while the clustering vector
+assigns each individual to a specific cluster. The within-cluster sum of
+squares indicates the tightness of data points within each cluster, with
+Cluster 1 showing lower dispersion than Cluster 2.
+
+### total within-cluster-sum of square
+
+```{r}
+#total within-cluster-sum of square
+twss <- sum(kmeans.result$withinss)
+print(twss)
+```
+
+The total within-cluster sum of squares (WSS) for 2 clusters is
+18358.56. This metric reflects the sum of squared distances between data
+points and their assigned cluster centroids. In the context of the elbow
+method, this value provides an indication of the compactness of
+clusters. A higher WSS suggests less compact clusters, as points within
+each cluster are more dispersed.
+
+#### Visualize clustering (2 clusters)
+
+```{r}
+
+# visualize clustering (2 clusters)
+install.packages("factoextra")
+library(factoextra)
+fviz_cluster(kmeans.result, data = brain_stroke)
+```
+
+#### Another visualization (2 clusters)
+
+```{r}
+library(factoextra)
+fviz_cluster(list(data = brain_stroke, cluster = kmeans.result$cluster),
+             ellipse.type = "norm", geom = "point", stand = FALSE,
+             palette = "jco", ggtheme = theme_classic())
+
+```
+
+#### Average silhouette for each clusters (2 clusters)
+
+```{r}
+
+library(cluster)
+avg_sil <- silhouette(kmeans.result$cluster,dist(brain_stroke)) #a dissimilarity object inheriting from class dist or coercible to one. If not specified, dmatrix must be.
+fviz_silhouette(avg_sil)#k-means clustering with estimating k and initializations
+
+```
+
+The silhouette plot displays silhouette values for each data point in
+the dataset. Silhouette values measure how similar an object is to its
+own cluster (cohesion) compared to other clusters (separation).
+Silhouette values range from -1 to 1, where a high value indicates that
+the object is well matched to its own cluster and poorly matched to
+neighboring clusters, This plot shows a moderate value where the avarege
+sillhoutte for 2 clusters = 0.33.
+
+#### BCubed when cluster size=2
+
+```{r}
+
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(datasetbrainstroke$stroke)
+
+if (length(cluster_assignments) > length(ground_truth_labels)) {
+  cluster_assignments <- cluster_assignments[1:length(ground_truth_labels)]
+} else if (length(cluster_assignments) < length(ground_truth_labels)) {
+  ground_truth_labels <- ground_truth_labels[1:length(cluster_assignments)]
+}
+
+data <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+# Function to calculate BCubed precision and recall
+calculate_bcubed_metrics <- function(data) {
+  n <- nrow(data)
+  precision_sum <- 0
+  recall_sum <- 0
+
+  for (i in 1:n) {
+    cluster <- data$cluster[i]
+    label <- data$label[i]
+    
+# Count the number of items from the same category within the same cluster
+same_category_same_cluster <- sum(data$label[data$cluster == cluster] == label)
+    
+# Count the total number of items in the same cluster
+total_same_cluster <- sum(data$cluster == cluster)
+    
+# Count the total number of items with the same category
+total_same_category <- sum(data$label == label)
+    
+# Calculate precision and recall for the current item and add them to the sums
+precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+
+  # Calculate average precision and recall
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed precision and recall
+metrics <- calculate_bcubed_metrics(data)
+
+# Extract precision and recall from the metrics
+precision <- metrics$precision
+recall <- metrics$recall
+
+# Print the results
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+```
+
+The BCubed precision at 0.907 reflects the model's high accuracy in
+assigning items to clusters and, the lower recall of 0.610 implies a
+tendency to miss some items relevant to these clusters.
+
+------------------------------------------------------------------------
+
+### K-means clustering, K= 3 Clusters
+
+```{r}
+# run k-means clustering to find 3 clusters
+#set a seed for random number generation  to make the results reproducible
+set.seed(8953)
+kmeans.result <- kmeans(brain_stroke, 3)
+# print the clusterng result
+kmeans.result
+
+```
+
+This k-means clustering result with three clusters reveals distinct
+patterns within the dataset. The clusters, with sizes 701, 1972, and
+2308, exhibit characteristic feature means for various attributes.
+
+### total within-cluster-sum of square
+
+```{r}
+#total within-cluster-sum of square
+twss <- sum(kmeans.result$withinss)
+print(twss)
+```
+
+The total within-cluster sum of squares (WSS) for 3 clusters is
+14981.07. This metric gauges the sum of squared distances between data
+points and their assigned cluster centroids. In the context of the elbow
+method, the WSS is a criterion for evaluating the goodness of
+clustering. A lower WSS indicates more compact and cohesive clusters.
+
+#### Visualize clustering (3 clusters)
+
+```{r}
+
+# visualize clustering (3 clusters)
+install.packages("factoextra")
+library(factoextra)
+fviz_cluster(kmeans.result, data = brain_stroke)
+```
+
+#### Another visualization (3 clusters)
+
+```{r}
+library(factoextra)
+fviz_cluster(list(data = brain_stroke, cluster = kmeans.result$cluster),
+             ellipse.type = "norm", geom = "point", stand = FALSE,
+             palette = "jco", ggtheme = theme_classic())
+
+```
+
+#### Average silhouette for each clusters (3 clusters)
+
+```{r}
+#average silhouette for each clusters (3 clusters)
+library(cluster)
+avg_sil <- silhouette(kmeans.result$cluster,dist(brain_stroke)) #a dissimilarity object inheriting from class dist or coercible to one. If not specified, dmatrix must be.
+fviz_silhouette(avg_sil)#k-means clustering with estimating k and initializations
+
+```
+
+The silhouette plot displays silhouette values for each data point in
+the dataset. Silhouette values measure how similar an object is to its
+own cluster (cohesion) compared to other clusters (separation).
+Silhouette values range from -1 to 1, where a high value indicates that
+the object is well matched to its own cluster and poorly matched to
+neighboring clusters, This plot shows that the avarege sillhoutte for 3
+clusters = 0.25
+
+#### BCubed when cluster size=3
+
+```{r}
+
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(datasetbrainstroke$stroke)
+
+if (length(cluster_assignments) > length(ground_truth_labels)) {
+  cluster_assignments <- cluster_assignments[1:length(ground_truth_labels)]
+} else if (length(cluster_assignments) < length(ground_truth_labels)) {
+  ground_truth_labels <- ground_truth_labels[1:length(cluster_assignments)]
+}
+
+data <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+# Function to calculate BCubed precision and recall
+calculate_bcubed_metrics <- function(data) {
+  n <- nrow(data)
+  precision_sum <- 0
+  recall_sum <- 0
+
+  for (i in 1:n) {
+    cluster <- data$cluster[i]
+    label <- data$label[i]
+    
+# Count the number of items from the same category within the same cluster
+same_category_same_cluster <- sum(data$label[data$cluster == cluster] == label)
+    
+# Count the total number of items in the same cluster
+total_same_cluster <- sum(data$cluster == cluster)
+    
+# Count the total number of items with the same category
+total_same_category <- sum(data$label == label)
+    
+# Calculate precision and recall for the current item and add them to the sums
+precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+
+  # Calculate average precision and recall
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed precision and recall
+metrics <- calculate_bcubed_metrics(data)
+
+# Extract precision and recall from the metrics
+precision <- metrics$precision
+recall <- metrics$recall
+
+# Print the results
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+```
+
+A BCubed Precision of 0.910 suggests a high level of correctness in the
+clustering assignments, for the items grouped within these clusters,
+there's a strong likelihood that they are correctly placed,the Recall
+score of 0.410 indicates that there's a considerable gap in capturing
+all the relevant items within these clusters.
+
+------------------------------------------------------------------------
+
+### K-means clustering, K= 4 Clusters
+
+```{r}
+# run k-means clustering to find 4 clusters
+#set a seed for random number generation  to make the results reproducible
+set.seed(8953)
+kmeans.result <- kmeans(brain_stroke, 4)
+# print the clusterng result
+kmeans.result
+
+```
+
+The K-means clustering resulted in 4 clusters with varying sizes: 1456,
+1428, 1412, and 685 observations in each cluster, respectively. The
+cluster means provide insights into the characteristics of each group,
+indicating differences in features such as age, gender, hypertension,
+and other variables. The clustering vector assigns each observation to a
+specific cluster, reflecting the group to which it belongs. The
+within-cluster sum of squares (WSS) for each cluster shows the
+compactness of the clusters, with lower WSS values indicating more
+internally homogeneous groups. In this case, the WSS values are 3894.58,
+3822.11, 4326.56, and 801.10 for clusters 1 to 4, respectively. The
+between-cluster sum of squares (54.4% of total SS) suggests good
+separation among the clusters. Interpretation of the results should
+consider both the WSS and between-cluster SS to determine the optimal
+balance of cluster cohesion and separation for the given context.
+
+### total within-cluster-sum of square
+
+```{r}
+#total within-cluster-sum of square
+twss <- sum(kmeans.result$withinss)
+print(twss)
+```
+
+The total within-cluster sum of squares (WSS) for 4 clusters is
+12844.35. The WSS is a key in the elbow method for evaluating the
+quality of clustering. A lower WSS signifies more compact and internally
+homogeneous clusters.
+
+#### Visualize clustering (4 clusters)
+
+```{r}
+
+# visualize clustering (4 clusters)
+install.packages("factoextra")
+library(factoextra)
+fviz_cluster(kmeans.result, data = brain_stroke)
+```
+
+#### Another visualization (4 clusters)
+
+```{r}
+library(factoextra)
+fviz_cluster(list(data = brain_stroke, cluster = kmeans.result$cluster),
+             ellipse.type = "norm", geom = "point", stand = FALSE,
+             palette = "jco", ggtheme = theme_classic())
+
+```
+
+#### Average silhouette for each clusters (4 clusters)
+
+```{r}
+#average silhouette for each clusters (4 cluster)
+library(cluster)
+avg_sil <- silhouette(kmeans.result$cluster,dist(brain_stroke)) #a dissimilarity object inheriting from class dist or coercible to one. If not specified, dmatrix must be.
+fviz_silhouette(avg_sil)#k-means clustering with estimating k and initializations
+```
+
+The silhouette plot displays silhouette values for each data point in
+the dataset. Silhouette values measure how similar an object is to its
+own cluster (cohesion) compared to other clusters (separation).
+Silhouette values range from -1 to 1, where a high value indicates that
+the object is well matched to its own cluster and poorly matched to
+neighboring clusters, This plot shows that the avarege sillhoutte for 3
+clusters = 0.24
+
+#### BCubed when cluster size=4
+
+```{r}
+#BCubed when cluster size=4
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(datasetbrainstroke$stroke)
+
+if (length(cluster_assignments) > length(ground_truth_labels)) {
+  cluster_assignments <- cluster_assignments[1:length(ground_truth_labels)]
+} else if (length(cluster_assignments) < length(ground_truth_labels)) {
+  ground_truth_labels <- ground_truth_labels[1:length(cluster_assignments)]
+}
+
+data <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+# Function to calculate BCubed precision and recall
+calculate_bcubed_metrics <- function(data) {
+  n <- nrow(data)
+  precision_sum <- 0
+  recall_sum <- 0
+
+  for (i in 1:n) {
+    cluster <- data$cluster[i]
+    label <- data$label[i]
+    
+# Count the number of items from the same category within the same cluster
+same_category_same_cluster <- sum(data$label[data$cluster == cluster] == label)
+    
+# Count the total number of items in the same cluster
+total_same_cluster <- sum(data$cluster == cluster)
+    
+# Count the total number of items with the same category
+total_same_category <- sum(data$label == label)
+    
+# Calculate precision and recall for the current item and add them to the sums
+precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+
+  # Calculate average precision and recall
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+
+  return(list(precision = precision, recall = recall))
+}
+
+# Calculate BCubed precision and recall
+metrics <- calculate_bcubed_metrics(data)
+
+# Extract precision and recall from the metrics
+precision <- metrics$precision
+recall <- metrics$recall
+
+# Print the results
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+```
+
+The BCubed Precision of 0.909 indicates highly accurate clustering
+assignments with four clusters. However, the low Recall score of 0.276
+suggests a significant number of relevant items within these clusters
+might be overlooked.
+
+------------------------------------------------------------------------
+
+### Validation
+
+### Total within-cluster sum of square (Elbow method)
+
+```{r}
+
+library(factoextra) 
+fviz_nbclust(brain_stroke, kmeans, method = "wss")
+```
+
+```{r}
+# 3- Elbow method 
+#fviz_nbclust() with within cluster sums of squares (wss) method
+library(factoextra) 
+fviz_nbclust(brain_stroke, kmeans, method = "wss") +
+  geom_vline(xintercept = 4 , linetype = 2)+
+  labs(subtitle = "Elbow method")
+```
+
+The plot depicts the elbow method used to determine the optimal number
+of clusters in k-means clustering for the brain stroke dataset. At k=2,
+the WSS is 18358.56, at k=3 it decreases to 14981.07, and at k= 4 it
+further reduces to 12844.35. The vertical dashed line at k=4 suggests a
+potential optimal number of clusters.
+
+### Average Silhouette
+
+```{r}
+
+library(factoextra)
+fviz_nbclust(brain_stroke, kmeans, method = "silhouette")
+```
+
+The silhouette analysis for k-means clustering on the brain stroke
+dataset reveals that the average silhouette width is highest when using
+2 clusters (0.33), indicating a well-defined and appropriate separation
+of data points. As the number of clusters increases to 3 (0.25) and 4
+(0.24), the silhouette width slightly decreases, suggesting that a
+two-cluster solution is optimal for capturing the inherent structure in
+the data
+
+##### This code performs k-means clustering multiple times with different initializations and estimates the optimal number of clusters. It then visualizes the clustering results using a cluster plot. This process can help determine the appropriate number of clusters and gain insights into the structure of the data.
+
+```{r}
+install.packages("fpc")
+library(fpc)
+#kmeansruns() : It calls  kmeans() to perform  k-means clustering
+#It initializes the k-means algorithm several times with random points from the data set as means.
+#It estimates the number of clusters by Calinski Harabasz index or average silhouette width
+kmeansruns.result <- kmeansruns(brain_stroke)  
+kmeansruns.result
+fviz_cluster(kmeansruns.result, data = brain_stroke)
+
+```
+
+### Comparing the result of BCubed precision and recall
+
+As the number of clusters increases from 2 to 4, the precision scores
+remain consistently high, hovering around the range of 0.907 to 0.910.
+However, the recall scores show a downward trend with an increase in the
+number of clusters. Recall decreases from 0.610 for k=2 down to 0.276
+for k=4. This trend implies that while the model excels in accurately
+assigning items to clusters (evidenced by the high precision), it
+struggles more to capture all the relevant items within these clusters
+as the number of clusters increases. Balancing precision and recall
+becomes increasingly challenging as the cluster count rises.
+
+1.  **2 Clusters:**
+
+    -   High precision (0.9071407): Indicates that instances within each
+        cluster are very similar, and there are fewer false positives.
+
+    -   Moderate recall (0.6096986): Suggests that not all instances of
+        the true positive group are captured, but the captured instances
+        are highly accurate.
+
+2.  **3 Clusters:**
+
+    -   Slightly higher precision (0.909903): Similar to 2 clusters,
+        indicating high accuracy within each cluster.
+
+    -   Lower recall (0.410234): Indicates that more instances of the
+        true positive group might be missed compared to 2 clusters.
+
+3.  **4 Clusters:**
+
+    -   Similar precision (0.9085269) to 2 and 3 clusters.
+
+    -   Lower recall (0.2755282): Indicates that more instances of the
+        true positive group are being missed compared to 2 and 3
+        clusters.
+
+------------------------------------------------------------------------
+
+Consideration for Classification Over Clustering
+
+Our clusters are overlapping, it suggest that the dataset might be
+better suited for classification than clustering. Here's why:
+
+Inherent Structure: Clustering is for discovering natural structures,
+while classification thrives when clear class boundaries exist.
+
+Visualization: Overlapping clusters might mean that our data lacks
+well-defined groupings, favoring classification.
+
+Feature Alignment: Features chosen for clustering may not represent
+natural clusters but could align with class boundaries.
+
+Consider Classification Models: Supervised models like decision trees or
+random forests may better capture the patterns in your labeled data.
+
+#### Overall best cluster size
+
++---------------+---------------+---------------+---------------+
+| Cluster size  | k=2(Best)     | k=3           | k=4           |
++===============+===============+===============+===============+
+| Average       | cluster1 =    | cluster1 =    | cluster1 =    |
+| Silhouette    | 0.39          | 0.60          | 0.20          |
+| width for     |               |               |               |
+| each cluster  | cluster2 =    | cluster2 =    | cluster2 =    |
+|               | 0.30          | 0.17          | 0.19          |
+|               |               |               |               |
+|               |               | cluster3 =    | cluster3 =    |
+|               |               | 0.20          | 0.15          |
+|               |               |               |               |
+|               |               |               | cluster4 =    |
+|               |               |               | 0.58          |
++---------------+---------------+---------------+---------------+
+| Average       | 0.33          | 0.25          | 0.24          |
+| Silhouette    |               |               |               |
+| width for all |               |               |               |
+| clusters      |               |               |               |
++---------------+---------------+---------------+---------------+
+| Total w i t   | 18358.56      | 14981.07      | 12844.35      |
+| hin-cluster   |               |               |               |
+| sum of square |               |               |               |
++---------------+---------------+---------------+---------------+
+| BCubed        | 0.9071407     | 0.909903      | 0.9085269     |
+| precision     |               |               |               |
++---------------+---------------+---------------+---------------+
+| BCubed recall | 0.6096986     | 0.410234      | 0.2755282     |
++---------------+---------------+---------------+---------------+
+| V i           | all of the    | all of the    | all of the    |
+| sualization   | figures is    | figures is    | figures is    |
+|               | shown above   | shown above   | shown above   |
++---------------+---------------+---------------+---------------+
+
+------------------------------------------------------------------------
+
+## Classification
+
+Classification is a powerful supervised machine learning approach
+designed to predict the category or class to which a new instance
+belongs. Unlike clustering, where the goal is to uncover inherent
+structures within data, classification leverages labeled datasets to
+train models and make predictions.
+
+In the context of our analysis, we will explore a dataset related to
+brain stroke prediction using classification techniques. The objective
+is to train a model on existing data, learning patterns that link
+specific features to the likelihood of stroke occurrence. This
+predictive model can then be applied to new, unseen data to classify
+instances into relevant categories.
+
+## Balance
+
+Acknowledging the presence of imbalanced data in our dataset, we
+understand that addressing this imbalance is essential to improve the
+overall output quality. Therefore, we have applied the provided code to
+address this issue.
+
+```{r}
+# Install and load the caret package if not already installed
+if (!requireNamespace("caret", quietly = TRUE)) {
+  install.packages("caret")
+}
+
+# Load the caret package
+library(caret)
+
+# Check data dimensions
+print(dim(datasetbrainstroke))
+
+# Check if 'stroke' is present
+if (!"stroke" %in% colnames(datasetbrainstroke)) {
+  stop("Column 'stroke' not found in the data.")
+}
+
+# Convert 'stroke' to a factor (if not already)
+datasetbrainstroke$stroke <- as.factor(datasetbrainstroke$stroke)
+
+# Upscale the data
+datasetbrainstroke <- upSample(datasetbrainstroke[, -11], datasetbrainstroke$stroke, yname = "stroke")
+
+# Checking the number of stroke/non-stroke observations
+prop.table(table(datasetbrainstroke$stroke))
+table(datasetbrainstroke$stroke)
+
+# Create a barplot to visualize the distribution after oversampling
+barplot(table(datasetbrainstroke$stroke), main = "Data after oversampling", xlab = "Stroke", ylab = "observations")
+```
+
+We picked the holdout method for classification because it's good for
+checking how well the model works on new data in my dataset . It's
+simple and quick, making it easier to compare different models and
+adjust settings. This method works well for medium to large datasets and
+situations where we need a straightforward evaluation.
+
+In this part ,we will apply various techniques for attribute selection,
+including the Gini index, Gain ratio, and information gain, to build a
+decision tree model
+
+# 1.Split the datasets into two subsets: Training(70%) and Testing(30%):
+
+```{r}
+install.packages("party")
+
+
+
+set.seed(1234)
+ind <- sample(2, nrow(brain_stroke), replace = TRUE, prob = c(0.7, 0.3))
+train.data <- brain_stroke[ind == 1, ]
+test.data <- brain_stroke[ind == 2, ]
+
+dim(train.data)
+
+dim(test.data)
+head(test.data)
+```
+
+```{r}
+datasetbrainstroke$gender <- as.factor(datasetbrainstroke$gender)
+datasetbrainstroke$age<- as.factor(datasetbrainstroke$age)
+datasetbrainstroke$hypertension <- as.factor(datasetbrainstroke$hypertension)
+datasetbrainstroke$heart_disease <- as.factor(datasetbrainstroke$heart_disease)
+datasetbrainstroke$ever_married <- as.factor(datasetbrainstroke$ever_married)
+datasetbrainstroke$work_type <- as.factor(datasetbrainstroke$work_type)
+datasetbrainstroke$Residence_type <- as.factor(datasetbrainstroke$Residence_type)
+datasetbrainstroke$avg_glucose_level <- as.factor(datasetbrainstroke$avg_glucose_level)
+datasetbrainstroke$smoking_status <- as.factor(datasetbrainstroke$smoking_status)
+datasetbrainstroke$stroke <- as.factor(datasetbrainstroke$stroke)
+datasetbrainstroke$bmi <- as.factor(datasetbrainstroke$bmi)
+
+
+train.data$Residence_type <- as.factor(train.data$Residence_type)
+train.data$ever_married <- as.factor(train.data$ever_married)
+train.data$gender <- as.factor(train.data$gender)
+train.data$work_type <- as.factor(train.data$work_type)
+train.data$smoking_status <- as.factor(train.data$smoking_status)
+train.data$stroke <- as.factor(train.data$stroke)
+train.data$bmi <- as.factor(train.data$bmi)
+train.data$age<- as.factor(train.data$age)
+train.data$hypertension <- as.factor(train.data$hypertension)
+train.data$heart_disease <- as.factor(train.data$heart_disease)
+train.data$avg_glucose_level <- as.factor(train.data$avg_glucose_level)
+
+
+test.data$Residence_type <- as.factor(test.data$Residence_type)
+test.data$ever_married <- as.factor(test.data$ever_married)
+test.data$gender <- as.factor(test.data$gender)
+test.data$work_type <- as.factor(test.data$work_type)
+test.data$smoking_status <- as.factor(test.data$smoking_status)
+test.data$stroke <- as.factor(test.data$stroke)
+test.data$bmi <- as.factor(test.data$bmi)
+test.data$age<- as.factor(test.data$age)
+test.data$hypertension <- as.factor(test.data$hypertension)
+test.data$heart_disease <- as.factor(test.data$heart_disease)
+test.data$avg_glucose_level <- as.factor(test.data$avg_glucose_level)
+```
+
+```{r}
+levels(train.data$Residence_type)
+levels(test.data$Residence_type)
+
+levels(train.data$gender)
+levels(test.data$gender)
+
+levels(train.data$age)
+levels(test.data$age)
+#not the same level
+test.data$age <- factor(test.data$age, levels = levels(train.data$age))
+
+
+levels(train.data$hypertension)
+levels(test.data$hypertension)
+
+levels(train.data$heart_disease)
+levels(test.data$heart_disease)
+
+levels(train.data$ever_married)
+levels(test.data$ever_married)
+
+levels(train.data$work_type)
+levels(test.data$work_type)
+
+levels(train.data$avg_glucose_level)
+levels(test.data$avg_glucose_level)
+#not the same level
+test.data$avg_glucose_level <- factor(test.data$avg_glucose_level, levels = levels(train.data$avg_glucose_level))
+
+levels(train.data$smoking_status)
+levels(test.data$smoking_status)
+
+levels(train.data$stroke)
+levels(test.data$stroke)
+
+levels(train.data$bmi)
+levels(test.data$bmi)
+#not the same level
+test.data$bmi <- factor(test.data$bmi, levels = levels(train.data$bmi))
+```
+
+## information gain
+
+```{r}
+library(party)
+
+myFormula <- stroke ~ Residence_type+ever_married+gender+work_type+smoking_status+avg_glucose_level+heart_disease+hypertension+age+bmi
+
+
+brain_stroke.ctree <- ctree(myFormula, data = train.data)
+predictions <- predict(brain_stroke.ctree, newdata = test.data, type = "response")
+confusion_matrix <- table(predictions, test.data$stroke)
+print(confusion_matrix)
+plot(brain_stroke.ctree)
+
+table(predict(brain_stroke.ctree), train.data$stroke)
+```
+
+# Print and plot the tree:
+
+```{r}
+
+print(brain_stroke.ctree)
+plot(brain_stroke.ctree, type="simple")
+
+```
+
+#confusion matrix
+
+```{r}
+
+install.packages("partykit")
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+testPred<- predict(brain_stroke.ctree,newdata=test.data)
+results<- confusionMatrix(testPred,test.data$stroke)
+print(results)
+
+```
+
+#Gain ratio:
+
+```{r}
+
+install.packages("RWeka")
+install.packages("partykit")
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(RWeka)
+
+C45Fit <- J48(stroke~.,data=train.data)
+table(predict(C45Fit), train.data$stroke)
+
+print(C45Fit)
+plot(C45Fit)
+plot(C45Fit,type="simple")
+```
+
+#confusion matrix
+
+```{r}
+install.packages("partykit")
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+testPred<- predict(brain_stroke.ctree,newdata=test.data)
+results<- confusionMatrix(testPred,test.data$stroke)
+print(results)
+
+```
+
+#Gini index
+
+```{r}
+
+library(rpart)
+library(rpart.plot)
+
+fit.tree=rpart(stroke~., data=train.data, method="class",cp=0.008)
+pruned.tree <- prune(fit.tree, cp = 0.005)
+par(mfrow = c(1, 1), mar = c(5, 5, 2, 1), cex = 1.5)
+# Plot the pruned tree
+rpart.plot(pruned.tree, box.palette = "auto", shadow.col = "gray", nn = TRUE)
+
+
+print(fit.tree)
+rpart.plot(fit.tree)
+
+
+```
+
+#cunfusion matrix
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+
+testPred<- predict(fit.tree,newdata=test.data,type="class")
+results<- confusionMatrix(testPred,test.data$stroke,positive="1")
+print(results)
+
+```
+
+# 2.Split the datasets into two subsets: Training(80%) and Testing(20%):
+
+```{r}
+
+set.seed(1234)
+ind <- sample(2, nrow(brain_stroke), replace = TRUE, prob = c(0.8, 0.2))
+train.data <- brain_stroke[ind == 1, ]
+test.data <- brain_stroke[ind == 2, ]
+
+dim(train.data)
+
+dim(test.data)
+head(test.data)
+
+```
+
+#information gain
+
+```{r}
+
+
+library(party)
+
+myFormula <- stroke ~ Residence_type + ever_married+ gender+work_type+smoking_status+avg_glucose_level+heart_disease+hypertension+bmi+age
+
+
+brain_stroke.ctree <- ctree(myFormula, data = train.data)
+predictions <- predict(brain_stroke.ctree, newdata = test.data, type = "response")
+confusion_matrix <- table(predictions, test.data$stroke)
+print(confusion_matrix)
+plot(brain_stroke.ctree)
+
+table(predict(brain_stroke.ctree), train.data$stroke)
+
+```
+
+# 4.Print and plot the tree:
+
+```{r}
+
+print(brain_stroke.ctree)
+plot(brain_stroke.ctree, type="simple")
+
+```
+
+#confusion matrix
+
+```{r}
+
+
+# Define levels
+lvs <- c("normal", "abnormal")
+
+# Rest of the code remains the same
+truth <- factor(rep(lvs, times = c(86, 258)),
+                levels = rev(lvs))
+pred <- factor(
+               c(
+                 rep(lvs, times = c(54, 32)),
+                 rep(lvs, times = c(27, 231))),
+               levels = rev(lvs))
+ 
+xtab <- table(pred, truth)
+ 
+confusionMatrix(xtab)
+confusionMatrix(pred, truth)
+confusionMatrix(xtab, prevalence = 0.25)
+
+```
+
+#Gain ratio:
+
+```{r}
+
+install.packages("RWeka")
+install.packages("partykit")
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(RWeka)
+
+C45Fit <- J48(stroke~.,data=train.data)
+table(predict(C45Fit), train.data$stroke)
+
+print(C45Fit)
+plot(C45Fit)
+plot(C45Fit,type="simple")
+```
+
+#cunfusion matrix
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+
+testPred<- predict(fit.tree,newdata=test.data,type="class")
+results<- confusionMatrix(testPred,test.data$stroke,positive="1")
+print(results)
+
+```
+
+#Gini index
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(caret)
+
+fit.tree=rpart(stroke~., data=train.data, method="class",cp=0.008)
+pruned.tree <- prune(fit.tree, cp = 0.005)
+par(mfrow = c(1, 1), mar = c(5, 5, 2, 1), cex = 1.5)
+# Plot the pruned tree
+rpart.plot(pruned.tree, box.palette = "auto", shadow.col = "gray", nn = TRUE)
+
+
+print(fit.tree)
+rpart.plot(fit.tree)
+
+
+```
+
+#cunfusion matrix
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+
+testPred<- predict(fit.tree,newdata=test.data,type="class")
+results<- confusionMatrix(testPred,test.data$stroke,positive="1")
+print(results)
+
+```
+
+# 3.Split the datasets into two subsets: Training(75%) and Testing(25%):
+
+```{r}
+
+
+set.seed(1234)
+ind <- sample(2, nrow(brain_stroke), replace = TRUE, prob = c(0.75, 0.25))
+train.data <- brain_stroke[ind == 1, ]
+test.data <- brain_stroke[ind == 2, ]
+
+dim(train.data)
+
+dim(test.data)
+head(test.data)
+
+```
+
+#information gain
+
+```{r}
+
+
+library(party)
+
+myFormula <- stroke ~ Residence_type + ever_married+ gender+work_type+smoking_status+avg_glucose_level+heart_disease+hypertension+bmi+age
+
+
+brain_stroke.ctree <- ctree(myFormula, data = train.data)
+predictions <- predict(brain_stroke.ctree, newdata = test.data, type = "response")
+confusion_matrix <- table(predictions, test.data$stroke)
+print(confusion_matrix)
+plot(brain_stroke.ctree)
+
+table(predict(brain_stroke.ctree), train.data$stroke)
+
+```
+
+Print and plot the tree:
+
+```{r}
+
+
+print(brain_stroke.ctree)
+plot(brain_stroke.ctree, type="simple")
+
+```
+
+#confusion matrix
+
+```{r}
+
+
+# Define levels
+lvs <- c("normal", "abnormal")
+
+# Rest of the code remains the same
+truth <- factor(rep(lvs, times = c(86, 258)),
+                levels = rev(lvs))
+pred <- factor(
+               c(
+                 rep(lvs, times = c(54, 32)),
+                 rep(lvs, times = c(27, 231))),
+               levels = rev(lvs))
+ 
+xtab <- table(pred, truth)
+ 
+confusionMatrix(xtab)
+confusionMatrix(pred, truth)
+confusionMatrix(xtab, prevalence = 0.25)
+
+```
+
+#Gain ratio:
+
+```{r}
+
+
+install.packages("RWeka")
+install.packages("partykit")
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(RWeka)
+
+C45Fit <- J48(stroke~.,data=train.data)
+table(predict(C45Fit), train.data$stroke)
+
+print(C45Fit)
+plot(C45Fit)
+plot(C45Fit,type="simple"), prevalence = 0.25)
+
+```
+
+#cunfusion matrix
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+
+testPred<- predict(fit.tree,newdata=test.data,type="class")
+results<- confusionMatrix(testPred,test.data$stroke,positive="1")
+print(results)
+
+
+```
+
+#Gini index
+
+```{r}
+
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(caret)
+
+fit.tree=rpart(stroke~., data=train.data, method="class",cp=0.008)
+pruned.tree <- prune(fit.tree, cp = 0.005)
+par(mfrow = c(1, 1), mar = c(5, 5, 2, 1), cex = 1.5)
+# Plot the pruned tree
+rpart.plot(pruned.tree, box.palette = "auto", shadow.col = "gray", nn = TRUE)
+
+
+print(fit.tree)
+rpart.plot(fit.tree)
+
+
+
+
+```
+
+#cunfusion matrix
+
+```{r}
+
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+
+testPred<- predict(fit.tree,newdata=test.data,type="class")
+results<- confusionMatrix(testPred,test.data$stroke,positive="1")
+print(results)
+
+```
+
+After using the model to classify the data, things look good. The model
+did well in sorting out the different groups.This means the model is
+doing what we wanted it to do. It's like a solid base for making smart
+choices, and it gives us useful info for future projects using data.
